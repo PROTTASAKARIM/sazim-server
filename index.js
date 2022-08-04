@@ -76,6 +76,28 @@ app.post('/products', (req, res) => {
     })
     client.end;
 })
+app.put('/products/:p_id', (req, res) => {
+    let p_id = req.params.p_id
+    let user = req.body;
+    console.log(user)
+    let updateQuery = `update products
+                       set p_title = '${user.p_title}',
+                       p_categories = '${user.p_categories}',
+                       p_description = '${user.p_description}',
+                       p_price = '${user.p_price}',
+                       p_rent = '${user.p_rent}',
+                       p_rentoption = '${user.p_rentoption}',
+                       p_user = '${user.p_user}'
+                       where p_id = ${p_id}`
+
+    client.query(updateQuery, (err, result) => {
+        if (!err) {
+            res.send(result)
+        }
+        else { console.log(err.message) }
+    })
+    client.end;
+})
 
 app.get('/products/:p_id', (req, res) => {
     client.query(`Select * from products where p_id=${req.params.p_id}`, (err, result) => {
