@@ -38,9 +38,33 @@ app.get('/products', (req, res) => {
     });
     client.end;
 })
+
+app.get('products/myproducts', (req, res) => {
+    const p_user = req.query.p_user;
+    console.log(p_user)
+    client.query(`Select * from products where p_user='${p_user}'`, (err, result) => {
+        if (!err) {
+            res.send(result.rows);
+        }
+    });
+    client.end;
+})
+
+app.delete('/products', (req, res) => {
+    let deleteQuery = `delete from products where p_id=${req.query.p_id}`
+
+    client.query(deleteQuery, (err, result) => {
+        if (!err) {
+            res.send('Deletion was successful')
+        }
+        else { console.log(err.message) }
+    })
+    client.end;
+})
+
+
 app.post('/products', (req, res) => {
     const user = req.body;
-    console.log(user.p_title)
     let insertQuery = `insert into products(p_title, p_categories, p_description, p_price,p_rent,p_rentoption,p_user) 
                        values('${user.p_title}', '${user.p_categories}', '${user.p_description}', '${user.p_price}','${user.p_rent}','${user.p_rentoption}','${user.p_user}')`
 
@@ -52,3 +76,13 @@ app.post('/products', (req, res) => {
     })
     client.end;
 })
+
+app.get('/products/:p_id', (req, res) => {
+    client.query(`Select * from products where p_id=${req.params.p_id}`, (err, result) => {
+        if (!err) {
+            res.send(result.rows);
+        }
+    });
+    client.end;
+})
+
