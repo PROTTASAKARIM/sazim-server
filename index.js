@@ -135,7 +135,7 @@ app.post('/rent', (req, res) => {
 app.post('/order', (req, res) => {
     const user = req.body;
     console.log(user)
-    let insertQuery = `INSERT INTO public."order"(
+    let insertQuery = `INSERT INTO orders(
         p_id, o_date)
                        values('${user.p_id}', '${user.o_date}')`
 
@@ -145,6 +145,15 @@ app.post('/order', (req, res) => {
         }
         else { console.log(err.message) }
     })
+    client.end;
+})
+
+app.get('/rent', (req, res) => {
+    client.query(`Select * from products where p_id=${req.params.p_id}`, (err, result) => {
+        if (!err) {
+            res.send(result.rows);
+        }
+    });
     client.end;
 })
 
