@@ -39,6 +39,15 @@ app.get('/products', (req, res) => {
     client.end;
 })
 
+app.get('/rent', (req, res) => {
+    client.query(`Select * from rent`, (err, result) => {
+        if (!err) {
+            res.send(result.rows);
+        }
+    });
+    client.end;
+})
+
 app.get('products/myproducts', (req, res) => {
     const p_user = req.query.p_user;
     console.log(p_user)
@@ -105,6 +114,37 @@ app.get('/products/:p_id', (req, res) => {
             res.send(result.rows);
         }
     });
+    client.end;
+})
+
+app.post('/rent', (req, res) => {
+    const user = req.body;
+    console.log(user)
+    let insertQuery = `insert into rent( p_id, r_start,r_end) 
+                       values('${user.p_id}', '${user.r_start}', '${user.r_end}')`
+
+    client.query(insertQuery, (err, result) => {
+        if (!err) {
+            res.send(result);
+        }
+        else { console.log(err.message) }
+    })
+    client.end;
+})
+
+app.post('/order', (req, res) => {
+    const user = req.body;
+    console.log(user)
+    let insertQuery = `INSERT INTO public."order"(
+        p_id, o_date)
+                       values('${user.p_id}', '${user.o_date}')`
+
+    client.query(insertQuery, (err, result) => {
+        if (!err) {
+            res.send(result);
+        }
+        else { console.log(err.message) }
+    })
     client.end;
 })
 
